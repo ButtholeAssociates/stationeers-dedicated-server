@@ -8,21 +8,48 @@ LABEL AUTHOR slessardjr
 # Link To Official Docs
 # https://github.com/rocket2guns/StationeersDedicatedServerGuide
 
-ENV BRANCH=stable 
-ENV GAME_DIR=""
-ENV GAME_DATA_DIR=""
-ENV AUTO_SAVE_INTERVAL=""
-ENV WORLD_NAME=""
-ENV WORLD_TYPE=""
+ARG PORT_META_SERVER=8081
+ARG PORT_STEAM_UPDATE=27015
+ARG PORT_GAME=27016
+
+#Use this if you want to use the beta branch.
+ENV STEAMCMD_EXTRA_OPS=""
+
+# Dir for Stationeers to store it's data
+ENV GAME_DATA_DIR="/stationeers/data"
+
+# Dir for SteamCMD to use where it will download data
+ENV GAME_STEAM_DIR="/stationeers/steam"
+
+#
+ENV LOG_FILE="$GAME_DATA_DIR/stationeers_log.txt"
+ENV SAVE_NAME="Stationeers"
+ENV SETTINGS_PATH="$GAME_DATA_DIR/stationeers_settings.xml"
+ENV WORLD_TYPE="mars"
+
+## Stationeers Settings
+ENV AUTO_SAVE=true
+ENV GAME_PORT=$PORT_GAME
+ENV SAVE_INTERVAL=300
+ENV SAVE_PATH="$GAME_DATA_DIR"
+ENV SERVER_AUTH_SECRET="stationeers"
+ENV SERVER_MAX_PLAYERS=13
+ENV SERVER_NAME="Stationeers Docker -- ButtholeGaming"
+ENV SERVER_PASSWORD="stationeers"
+ENV SERVER_VISIBLE=true
+ENV START_LOCAL_HOST=true
+ENV UPNP_ENABLED=false
 
 COPY docker-entrypoint.sh /
 
-#VOLUME $GAME_DATA_DIR
+#VOLUME [$GAME_DATA_DIR, $GAME_STEAM_DIR]
 
-EXPOSE 8081/tcp 27015/udp 27016/udp 
+EXPOSE $PORT_META_SERVER/tcp $PORT_STEAM_UPDATE/udp $PORT_GAME/udp 
 
-WORKDIR $GAME_DIR
+WORKDIR $GAME_STEAM_DIR
 
+#Use this for testing only
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["echo"]
-#CMD [ "rocketstation_DedicatedServer.x86_64" ]
+
+CMD [ "rocketstation_DedicatedServer.x86_64" ]

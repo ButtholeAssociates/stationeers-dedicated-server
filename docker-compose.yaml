@@ -1,0 +1,21 @@
+services:
+  stationeers-server:
+    image: test
+    container_name: stationeers-server
+    environment:
+      AUTO_SAVE: true
+      GAME_PORT: 27016
+      SAVE_INTERVAL: 300
+      SAVE_NAME: Stationeers
+      SERVER_AUTH_SECRET: "stationeers"
+      SERVER_MAX_PLAYERS: 2
+      SERVER_NAME: "Stationeers Docker -- ButtholeAssociates"
+      SERVER_PASSWORD: "stationeers"
+      SERVER_VISIBLE: true
+      START_LOCAL_HOST: true
+      WORLD_TYPE: europa2
+      UPNP_ENABLED: false
+    ports:
+      - "8081:8081/tcp"
+      - "27015:27015/udp"
+      - "27016:27016/udp"
